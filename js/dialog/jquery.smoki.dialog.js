@@ -1,8 +1,9 @@
 /**
  * Created by zhbr on 2016/9/18.
  * dialogjs 对话框控件
- * 多种样式
- * 。。。
+ * 请务必使用新的元素去调用dialog方法，并将新元素加入到body中
+ * 比如说 var $a = $("<div></div>"); $a.dialog(); $(document.body).append($a);
+ * 推荐使用已经编写好的方法，比如说$.fn.smokiDialog.alert()等等
  */
 
 // smoki.importJS("js/core/jquery.smoki.widget.js");
