@@ -21,7 +21,7 @@
                     "js/util/jquery.smoki.map.js",
                     "js/core/jquery.smoki.widgetmgr.js",
                     "js/core/jquery.smoki.widget.js",
-                    "js/dialog/dialog.js"];
+                    "js/dialog/jquery.smoki.dialog.js"];
 
     //css文件路径（）
     var css_src = [ "css/theme1/common.css" , 'css/theme1/dialog.css' , "css/icomoon/style.css"];
