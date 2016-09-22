@@ -55,7 +55,7 @@
             /**
              * dialog的内容（为html结构的字符串）
              */
-            dialogContent: null,
+            content: null,
             /**
              * dialog的背景颜色
              * （支持"#000" 和 rgba(0，0，0，0.3)两种格式，但是为了IE，推荐第一种方式）
@@ -158,7 +158,9 @@
                 });
                 $(document.body).append($mask);
             }
-            $el.html($el.html() + p.content);
+            if(!!p.content){
+                $el.html($el.html() + p.content);
+            }
             switch (p.openAnimateType) {
                 case 'none':
                     $el.css('display', 'block');
@@ -168,41 +170,41 @@
                     break;
                 case 'slide-top':
                     $el.css({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 30 ) + 'px',
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24 ) + 'px',
                         display: "block",
                         opacity: 0
                     }).animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-30) ) + 'px',
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24) ) + 'px',
                         opacity: 1
                     }, p.animateTime);
                     break;
                 case 'slide-bottom' :
                     $el.css({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-30) ) + 'px',
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-32) ) + 'px',
                         display: "block",
                         opacity: 0
                     }).animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 30) + 'px',
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 32) + 'px',
                         opacity: 1
                     }, p.animateTime);
                     break;
                 case 'slide-left' :
                     $el.css({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 30) + 'px',
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 24) + 'px',
                         display: "block",
                         opacity: 0
                     }).animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-30)) + 'px',
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-24)) + 'px',
                         opacity: 1
                     }, p.animateTime);
                     break;
                 case 'slide-right' :
                     $el.css({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-30) ) + 'px',
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32) ) + 'px',
                         display: "block",
                         opacity: 0
                     }).animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 30) + 'px',
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
                         opacity: 1
                     }, p.animateTime);
                     break;
@@ -220,7 +222,7 @@
                         break;
                     case "slide-top" :
                         $el.animate({
-                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 30) + 'px',
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24) + 'px',
                             opacity: 0
                         }, p.animateTime , function () {
                             $el.remove();
@@ -229,7 +231,7 @@
                         break;
                     case "slide-bottom":
                         $el.animate({
-                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-30)) + 'px',
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24)) + 'px',
                             opacity: 0
                         }, p.animateTime, function () {
                             $el.remove();
@@ -238,7 +240,7 @@
                         break;
                     case "slide-left":
                         $el.animate({
-                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 30) + 'px',
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
                             opacity: 0
                         }, p.animateTime, function () {
                             $el.remove();
@@ -247,7 +249,7 @@
                         break;
                     case "slide-right" :
                         $el.animate({
-                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-30)) + 'px',
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32)) + 'px',
                             opacity: 0
                         }, p.animateTime, function () {
                             $el.remove();
@@ -260,11 +262,20 @@
     });
 
     //定义几个自己的dialog
+
+    /**
+     * @type {{alert: jQuery.smokiDialog.alert}}
+     */
     $.fn.smokiDialog = {
-        alert: function (msg) {
-            var $container = $("<div style='display:none;'></div>");
-            $(document.body).append($container);
-            $container.dialog({
+
+        /**
+         * @function 警告框，只支持显示文字
+         * @param msg 要显示的文字
+         * @param opt 修改的配置项
+         */
+        alert: function (msg, opt) {
+            var $box = $("<div></div>");
+            $box.dialog($.extend(true, {}, {
                 isCloseBtn: true,
                 isMask: true,
                 height: '200px',
@@ -272,10 +283,37 @@
                 closeAnimateType : 'slide-right',
                 animateTime : 400,
                 content: "<p style='line-height:200px; text-align: center;'>" + msg + "</p>"
-            });
-            $(document.body).append($container)
+            }, opt));
+            $(document.body).append($box)
+        },
+
+        /**
+         * @function 回答框，根据用户输入的信息判断正误（可用来登录和修改密码等等）
+         * @param content 使用者传入的html代码
+         * @param opt 配置项
+         * @param falseCallback 点击确定的时候返回false时的执行函数，此时默认会有一个动画效果（不可关）然后继续显示弹窗
+         * @param trueCallback 点击确定的时候返回true时的执行函数，默认会关闭弹窗
+         */
+        answer: function (content , opt, falseCallback, trueCallback) {
+            var $box = $("<div></div>");
+            var $container = $("<div></div>")
+            debugger;
+            $container.appendTo($box).addClass('dialog_container').html(content);
+            var $btnContainer = $("<div></div>");
+            var $yesBtn = $("<button>确认</button>");
+            $yesBtn.appendTo($btnContainer).addClass("dialog_yesBtn");
+            $btnContainer.appendTo($box).addClass('dialog_btnContainer');
+            $box.dialog($.extend(true, {}, {
+                isCloseBtn: true,
+                isMask: true,
+                openAnimateType: 'slide-left',
+                closeAnimateType : 'slide-right',
+                animateTime : 400
+            }, opt));
+            $(document.body).append($box)
         }
     };
+
 
 
 

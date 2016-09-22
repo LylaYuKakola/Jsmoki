@@ -13,11 +13,32 @@
 </head>
 <body>
 
-<div id="div1"></div>
+<div id="div1">
+    <button onclick="dialogAlert()">alert</button>
+    <button onclick="dialogAnswer()">answer</button>
+    <button>none</button>
+</div>
+
+<div id="content" style="display: none">
+    <input type="text" placeholder="用户名"/>
+    <input type="text" placeholder="密码"/>
+    <input type="text" placeholder="邮箱"/>
+</div>
 
 <script type="text/javascript">
+    function dialogAlert() {
+        $.fn.smokiDialog.alert("this is a test", {
+            openAnimateType: 'slide-top',
+            closeAnimateType : 'slide-bottom'
+        });
+    }
 
-    $.fn.smokiDialog.alert("this is a test");
+    function dialogAnswer() {
+        $.fn.smokiDialog.answer($("#content").html(), {
+            openAnimateType: 'slide-top',
+            closeAnimateType : 'slide-bottom'
+        });
+    }
 
 </script>
 
