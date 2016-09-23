@@ -20,9 +20,22 @@
              */
             width: '20%',
             /**
+             * 弹出框最小宽度，默认20%
+             */
+            minWidth: '20%',
+            /**
+             * 弹出框最大宽度，默认20%
+             */
+            maxWidth: '20%',
+            /**
              * 弹出框高度，默认auto
              */
             height: 'auto',
+            /**
+             * 背景设置
+             * 为‘none’的时候没有背景
+             */
+            boxShadow : '0 0 15px black',
             /**
              * dialog打开时的动画效果
              *
@@ -112,11 +125,14 @@
             var g = this, p = g.options, el = g.el, $el = $(el);
             $el.css({
                 'width': p.width,
+                'min-width' : p.minWidth,
+                'max-width' : p.maxWidth,
                 'height': p.height,
                 'opacity': p.dialogOpacity,
                 'background-color': p.dialogBgColor,
                 'position': 'absolute',
-                'z-index': $.fn.highestZindex + 2
+                'z-index': $.fn.highestZindex + 2,
+                'box-shadow' : p.boxShadow
             });
             if (p.isFixed) {
                 $el.css('position', 'fixed');
@@ -147,12 +163,11 @@
             var g = this, p = g.options, el = g.el, $el = $(el);
             if (p.isMask) {
                 var $mask = $("<div class='mask' id='dialog_mask'></div>");
-                var bHeight = $(document.body).height() > $(window).height() ? $(document.body).width() : $(window).height(),
-                    bWidth = $(document.body).width();
+                var bHeight = $(document.body).height() > $(window).height() ? $(document.body).width() : $(window).height();
                 $mask.css({
                     "z-index": $.fn.highestZindex + 1,
                     'height': bHeight + "px",
-                    'width': bWidth + "px",
+                    'width': '100%',
                     'opacity': p.maskOpacity,
                     'background-color': p.maskColor
                 });
@@ -296,7 +311,7 @@
          */
         answer: function (content , opt, falseCallback, trueCallback) {
             var $box = $("<div></div>");
-            var $container = $("<div></div>")
+            var $container = $("<div></div>");
             debugger;
             $container.appendTo($box).addClass('dialog_container').html(content);
             var $btnContainer = $("<div></div>");
@@ -305,12 +320,14 @@
             $btnContainer.appendTo($box).addClass('dialog_btnContainer');
             $box.dialog($.extend(true, {}, {
                 isCloseBtn: true,
+                width : 'auto',
+                minWidth : '200px',
                 isMask: true,
                 openAnimateType: 'slide-left',
                 closeAnimateType : 'slide-right',
                 animateTime : 400
             }, opt));
-            $(document.body).append($box)
+            $(document.body).append($box);
         }
     };
 

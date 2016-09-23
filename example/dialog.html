@@ -9,6 +9,15 @@
             margin: 0;
             padding: 0;
         }
+        .input{
+            width: 80%;
+            font-size: 15px;
+            padding: 0.7em 0.5em;
+            margin: 0.5em auto 0.5em ;
+        }
+        .dialogForm{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -19,10 +28,10 @@
     <button>none</button>
 </div>
 
-<div id="content" style="display: none">
-    <input type="text" placeholder="用户名"/>
-    <input type="text" placeholder="密码"/>
-    <input type="text" placeholder="邮箱"/>
+<div id="content" class="dialogForm" style="display: none">
+    <input type="text" class="input" placeholder="用户名"/>
+    <input type="text" class="input" placeholder="密码"/>
+    <input type="text" class="input" placeholder="邮箱"/>
 </div>
 
 <script type="text/javascript">
