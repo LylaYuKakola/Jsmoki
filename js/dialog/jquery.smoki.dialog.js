@@ -26,7 +26,7 @@
             /**
              * 弹出框最大宽度，默认20%
              */
-            maxWidth: '20%',
+            maxWidth: '100%',
             /**
              * 弹出框高度，默认auto
              */
@@ -35,7 +35,7 @@
              * 背景设置
              * 为‘none’的时候没有背景
              */
-            boxShadow : '0 0 15px black',
+            boxShadow: '0 0 15px black',
             /**
              * dialog打开时的动画效果
              *
@@ -56,7 +56,7 @@
             /**
              * 动画执行的毫秒数
              */
-            animateTime: 250,
+            animateTime: 100,
             /**
              * dialog是否有关闭键
              */
@@ -85,11 +85,11 @@
             /**
              * 遮罩颜色
              */
-            maskColor: "#000",
+            maskColor: "rgba(55, 58, 71, 1)",
             /**
              * 遮罩透明度
              */
-            maskOpacity: 0.3,
+            maskOpacity: 0.7,
             /**
              * dialog是否圆角
              */
@@ -125,14 +125,14 @@
             var g = this, p = g.options, el = g.el, $el = $(el);
             $el.css({
                 'width': p.width,
-                'min-width' : p.minWidth,
-                'max-width' : p.maxWidth,
+                'min-width': p.minWidth,
+                'max-width': p.maxWidth,
                 'height': p.height,
                 'opacity': p.dialogOpacity,
                 'background-color': p.dialogBgColor,
                 'position': 'absolute',
                 'z-index': $.fn.highestZindex + 2,
-                'box-shadow' : p.boxShadow
+                'box-shadow': p.boxShadow
             });
             if (p.isFixed) {
                 $el.css('position', 'fixed');
@@ -141,7 +141,7 @@
                 $el.css('border-radius', p.borderRadius);
             }
             if (p.isCloseBtn) {
-                $el.append("<a class = 'closeABtn icon-dark icon-fs16 icon-cross' id='dialog_closeBtn' href='javascript:void(0);'></a>")
+                $el.append("<a class = 'closeABtn icon-red icon-fs16 icon-cross' id='dialog_closeBtn' href='javascript:void(0);'></a>")
             }
             g.resizeDialog();
             g.showDialog();
@@ -161,19 +161,25 @@
 
         showDialog: function () {
             var g = this, p = g.options, el = g.el, $el = $(el);
+            var $mask = null;
             if (p.isMask) {
-                var $mask = $("<div class='mask' id='dialog_mask'></div>");
+                $mask = $("<div class='mask' id='dialog_mask'></div>");
                 var bHeight = $(document.body).height() > $(window).height() ? $(document.body).width() : $(window).height();
                 $mask.css({
                     "z-index": $.fn.highestZindex + 1,
                     'height': bHeight + "px",
                     'width': '100%',
-                    'opacity': p.maskOpacity,
+                    'opacity': 0,
                     'background-color': p.maskColor
                 });
                 $(document.body).append($mask);
+                if(p.isQuickClose){
+                    $mask.bind("click" , function () {
+                        g.closeDialog();
+                    })
+                }
             }
-            if(!!p.content){
+            if (!!p.content) {
                 $el.html($el.html() + p.content);
             }
             switch (p.openAnimateType) {
@@ -188,51 +194,83 @@
                         top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24 ) + 'px',
                         display: "block",
                         opacity: 0
-                    }).animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24) ) + 'px',
-                        opacity: 1
-                    }, p.animateTime);
+                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24) ) + 'px',
+                            opacity: 1
+                        }, p.animateTime)
+                    }, 10);
+                    setTimeout(function () {
+                        $mask.animate({
+                            opacity: p.maskOpacity
+                        }, p.animateTime)
+                    }, 9);
                     break;
                 case 'slide-bottom' :
                     $el.css({
                         top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-32) ) + 'px',
                         display: "block",
                         opacity: 0
-                    }).animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 32) + 'px',
-                        opacity: 1
-                    }, p.animateTime);
+                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 32) + 'px',
+                            opacity: 1
+                        }, p.animateTime);
+                    }, 10);
+                    setTimeout(function () {
+                        $mask.animate({
+                            opacity: p.maskOpacity
+                        }, p.animateTime)
+                    }, 9);
                     break;
                 case 'slide-left' :
                     $el.css({
                         left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 24) + 'px',
                         display: "block",
                         opacity: 0
-                    }).animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-24)) + 'px',
-                        opacity: 1
-                    }, p.animateTime);
+                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-24)) + 'px',
+                            opacity: 1
+                        }, p.animateTime);
+                    }, 10);
+                    setTimeout(function () {
+                        $mask.animate({
+                            opacity: p.maskOpacity
+                        }, p.animateTime)
+                    }, 9);
                     break;
                 case 'slide-right' :
                     $el.css({
                         left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32) ) + 'px',
                         display: "block",
                         opacity: 0
-                    }).animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
-                        opacity: 1
-                    }, p.animateTime);
+                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
+                            opacity: 1
+                        }, p.animateTime)
+                    }, 10);
+                    setTimeout(function () {
+                        $mask.animate({
+                            opacity: p.maskOpacity
+                        }, p.animateTime)
+                    }, 9);
                     break;
             }
-            $('#dialog_closeBtn').bind("click.dialog" , function (event) {
+            $('#dialog_closeBtn').bind("click.dialog", function (event) {
                 event.preventDefault();
-                var g = this, p = g.options, el = g.el, $el = $(el);
-                g._closeDialog();
+                g.closeDialog();
             });
         },
 
-        _closeDialog : function () {
-            switch(p.closeAnimateType){
+        closeDialog: function () {
+            var g = this, p = g.options, el = g.el, $el = $(el);
+            switch (p.closeAnimateType) {
                 case "none" :
                     $el.remove();
                     $('#dialog_mask').remove();
@@ -244,40 +282,68 @@
                     });
                     break;
                 case "slide-top" :
-                    $el.animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24) + 'px',
-                        opacity: 0
-                    }, p.animateTime , function () {
-                        $el.remove();
-                        $("#dialog_mask").remove();
-                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24) + 'px',
+                            opacity: 0
+                        }, p.animateTime, function () {
+                            $el.remove();
+                            $("#dialog_mask").remove();
+                        });
+                    }, 10);
+                    setTimeout(function () {
+                        $("#dialog_mask").animate({
+                            opacity: 0
+                        })
+                    }, 9);
                     break;
                 case "slide-bottom":
-                    $el.animate({
-                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24)) + 'px',
-                        opacity: 0
-                    }, p.animateTime, function () {
-                        $el.remove();
-                        $("#dialog_mask").remove();
-                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24)) + 'px',
+                            opacity: 0
+                        }, p.animateTime, function () {
+                            $el.remove();
+                            $("#dialog_mask").remove();
+                        });
+                    }, 10);
+                    setTimeout(function () {
+                        $("#dialog_mask").animate({
+                            opacity: 0
+                        })
+                    }, 9);
                     break;
                 case "slide-left":
-                    $el.animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
-                        opacity: 0
-                    }, p.animateTime, function () {
-                        $el.remove();
-                        $("#dialog_mask").remove();
-                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
+                            opacity: 0
+                        }, p.animateTime, function () {
+                            $el.remove();
+                            $("#dialog_mask").remove();
+                        });
+                    }, 10);
+                    setTimeout(function () {
+                        $("#dialog_mask").animate({
+                            opacity: 0
+                        })
+                    }, 9);
                     break;
                 case "slide-right" :
-                    $el.animate({
-                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32)) + 'px',
-                        opacity: 0
-                    }, p.animateTime, function () {
-                        $el.remove();
-                        $("#dialog_mask").remove();
-                    });
+                    setTimeout(function () {
+                        $el.animate({
+                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32)) + 'px',
+                            opacity: 0
+                        }, p.animateTime, function () {
+                            $el.remove();
+                            $("#dialog_mask").remove();
+                        });
+                    }, 10);
+                    setTimeout(function () {
+                        $("#dialog_mask").animate({
+                            opacity: 0
+                        })
+                    }, 9);
                     break;
                 default:
                     $el.remove();
@@ -286,7 +352,6 @@
             }
         }
     });
-
 
 
     //定义几个自己的dialog
@@ -303,13 +368,13 @@
          */
         alert: function (msg, opt) {
             var $box = $("<div></div>");
-            $box.dialog($.extend(true, {}, {
+            var g = $box.dialog($.extend(true, {}, {
                 isCloseBtn: true,
                 isMask: true,
                 height: '200px',
                 openAnimateType: 'slide-left',
-                closeAnimateType : 'slide-right',
-                animateTime : 400,
+                closeAnimateType: 'slide-right',
+                animateTime: 150,
                 content: "<p style='line-height:200px; text-align: center;'>" + msg + "</p>"
             }, opt));
             $(document.body).append($box)
@@ -323,8 +388,7 @@
          *                 返回false的时候会执行错误动画并执行falseCallback函数
          *                 返回true的时候执行弹出框关闭并执行trueCallback函数
          */
-        answer: function (content , opt, callback , falseCallback, trueCallback) {
-            var g = this, p = g.options, el = g.el, $el = $(el);
+        answer: function (content, opt, callback, falseCallback, trueCallback) {
             var $box = $("<div></div>");
             var $container = $("<div></div>");
             debugger;
@@ -333,80 +397,109 @@
             var $yesBtn = $("<button>确认</button>");
             $yesBtn.appendTo($btnContainer).addClass("dialog_yesBtn");
             $btnContainer.appendTo($box).addClass('dialog_btnContainer');
-            $box.dialog($.extend(true, {}, {
+            var g= $box.dialog($.extend(true, {}, {
                 isCloseBtn: true,
-                width : 'auto',
-                minWidth : '200px',
+                width: 'auto',
+                minWidth: '200px',
                 isMask: true,
                 openAnimateType: 'slide-left',
-                closeAnimateType : 'slide-right',
-                animateTime : 400
+                closeAnimateType: 'slide-right',
+                animateTime: 150
             }, opt));
             $(document.body).append($box);
-            $yesBtn.bind('click.dialog',function () {
-                if(!callback.call(this)){
+            $yesBtn.bind('click.dialog', function () {
+                if (!callback.call(this)) {
                     var btop = $box.css('top');
                     var bleft = $box.css('left');
                     $box.animate({
-                        top : btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
-                        left : bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
-                    }, 100 ,function () {
+                        top: btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
+                        left: bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
+                    }, 50, function () {
                         $box.animate({
-                            top : btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
-                            left : bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
-                        }, 100 , function () {
+                            top: btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
+                            left: bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
+                        }, 50, function () {
                             $box.animate({
-                                top : btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
-                                left : bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
-                            }, 100, function () {
+                                top: btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
+                                left: bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
+                            }, 50, function () {
                                 $box.animate({
-                                    top : btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
-                                    left : bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
-                                }, 100,function () {
+                                    top: btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
+                                    left: bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
+                                }, 50, function () {
                                     $box.animate({
-                                        top : btop,
-                                        left : bleft
-                                    },100 ,function () {
+                                        top: btop,
+                                        left: bleft
+                                    }, 50, function () {
                                         falseCallback.call(this)
                                     })
                                 })
                             })
                         })
                     });
-                }else{
-                    g._closeDialog();
+                } else {
+                    $box.dialog("closeDialog");
                     trueCallback.call(this)
                 }
             })
         },
 
         /**
-         * 弹出新页面
+         * @function 弹出新页面
          * 根据使用者传入的路径参数完成页面展示
+         * 不能和主页面进行交互，如果有需求，请通过后台或者本地存储。
          * @param url iframe 路径（绝对相对）
-         * @param width iframe高度
-         * @param height iframe高度
-         * @param isBlank iframe和dialog之间是否有空白边框
+         * @param opt 配置项
          */
-        iframeDialog : function (url, width , height, isBlank) {
-            var g = this, p = g.options, el = g.el, $el = $(el);
-            var $iframe = $("<iframe></iframe>");
+        iframeDialog: function (url, opt) {
+            var $iframe = $("<iframe></iframe>"),
+                $box = $("<div></div>");
 
-            var w, h ;
-            if((width.indexOf("em")!== -1 || width.indexOf("px") !== -1 || width.indexOf("%") !== -1)&&
-                (height.indexOf("em")!== -1 || height.indexOf("px") !== -1 || height.indexOf("%") !== -1)){
-                w = width;
-                h = height;
-            }else{
-                console.log("width和height 只支持单位为em、px、% 的字符串参数");
-                return false;
-            }
-            $iframe.setAttribute("src", url);
+            $iframe[0].setAttribute("src", url);
+
             $iframe.css({
-                'height' : h,
-                'width' : w
+                'height': "100%",
+                'width': "100%"
             });
+            $box.append($iframe);
 
+            $box.dialog($.extend(true, {
+                isCloseBtn: true,
+                width: '80%',
+                minWidth: '300px',
+                isMask: true,
+                openAnimateType: 'slide-left',
+                closeAnimateType: 'slide-right',
+                animateTime: 150,
+                height: '600px'
+            }, opt));
+            $(document.body).append($box);
+        },
+
+        /**
+         * @function tips 小提示
+         * @param msg 显示的内容(内容不要太多)
+         * @param showTime tips显示时间 (毫秒)
+         * @param opt 配置项
+         * 支持快速关闭
+         */
+        tips : function (msg , showTime, opt) {
+            var $box = $("<div></div>");
+            var g= $box.dialog($.extend(true, {}, {
+                isCloseBtn: false,
+                isMask: true,
+                height: '100px',
+                isQuickClose : true,
+                openAnimateType: 'slide-left',
+                closeAnimateType: 'slide-right',
+                animateTime: 150,
+                dialogBgColor : "rgba(202,228,182,0.6)",
+                content: "<p style='line-height:100px; text-align: center; color: #c94e50 ;'><b>" + msg + "</b></p>"
+            }, opt));
+            $(document.body).append($box);
+            setTimeout(function () {
+                $box.dialog("closeDialog");
+            }, showTime)
         }
 
     };
