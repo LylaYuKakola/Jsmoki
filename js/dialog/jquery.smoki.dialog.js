@@ -226,55 +226,68 @@
             }
             $('#dialog_closeBtn').bind("click.dialog" , function (event) {
                 event.preventDefault();
-                switch(p.closeAnimateType){
-                    case "none" :
-                        break;
-                    case "normal" :
-                        $el.fadeOut(p.animateTime, function () {
-                            $el.remove();
-                            $("#dialog_mask").remove();
-                        });
-                        break;
-                    case "slide-top" :
-                        $el.animate({
-                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24) + 'px',
-                            opacity: 0
-                        }, p.animateTime , function () {
-                            $el.remove();
-                            $("#dialog_mask").remove();
-                        });
-                        break;
-                    case "slide-bottom":
-                        $el.animate({
-                            top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24)) + 'px',
-                            opacity: 0
-                        }, p.animateTime, function () {
-                            $el.remove();
-                            $("#dialog_mask").remove();
-                        });
-                        break;
-                    case "slide-left":
-                        $el.animate({
-                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
-                            opacity: 0
-                        }, p.animateTime, function () {
-                            $el.remove();
-                            $("#dialog_mask").remove();
-                        });
-                        break;
-                    case "slide-right" :
-                        $el.animate({
-                            left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32)) + 'px',
-                            opacity: 0
-                        }, p.animateTime, function () {
-                            $el.remove();
-                            $("#dialog_mask").remove();
-                        });
-                        break;
-                }
+                var g = this, p = g.options, el = g.el, $el = $(el);
+                g._closeDialog();
             });
+        },
+
+        _closeDialog : function () {
+            switch(p.closeAnimateType){
+                case "none" :
+                    $el.remove();
+                    $('#dialog_mask').remove();
+                    break;
+                case "normal" :
+                    $el.fadeOut(p.animateTime, function () {
+                        $el.remove();
+                        $("#dialog_mask").remove();
+                    });
+                    break;
+                case "slide-top" :
+                    $el.animate({
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - 24) + 'px',
+                        opacity: 0
+                    }, p.animateTime , function () {
+                        $el.remove();
+                        $("#dialog_mask").remove();
+                    });
+                    break;
+                case "slide-bottom":
+                    $el.animate({
+                        top: ($el.css('top').substring(0, $el.css('top').indexOf('px')) - (-24)) + 'px',
+                        opacity: 0
+                    }, p.animateTime, function () {
+                        $el.remove();
+                        $("#dialog_mask").remove();
+                    });
+                    break;
+                case "slide-left":
+                    $el.animate({
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - 32) + 'px',
+                        opacity: 0
+                    }, p.animateTime, function () {
+                        $el.remove();
+                        $("#dialog_mask").remove();
+                    });
+                    break;
+                case "slide-right" :
+                    $el.animate({
+                        left: ($el.css('left').substring(0, $el.css('left').indexOf('px')) - (-32)) + 'px',
+                        opacity: 0
+                    }, p.animateTime, function () {
+                        $el.remove();
+                        $("#dialog_mask").remove();
+                    });
+                    break;
+                default:
+                    $el.remove();
+                    $("#dialog_mask").remove();
+                    break;
+            }
         }
     });
+
+
 
     //定义几个自己的dialog
 
@@ -306,10 +319,12 @@
          * @function 回答框，根据用户输入的信息判断正误（可用来登录和修改密码等等）
          * @param content 使用者传入的html代码
          * @param opt 配置项
-         * @param falseCallback 点击确定的时候返回false时的执行函数，此时默认会有一个动画效果（不可关）然后继续显示弹窗
-         * @param trueCallback 点击确定的时候返回true时的执行函数，默认会关闭弹窗
+         * @param callback 点击确定的时候执行的函数
+         *                 返回false的时候会执行错误动画并执行falseCallback函数
+         *                 返回true的时候执行弹出框关闭并执行trueCallback函数
          */
-        answer: function (content , opt, falseCallback, trueCallback) {
+        answer: function (content , opt, callback , falseCallback, trueCallback) {
+            var g = this, p = g.options, el = g.el, $el = $(el);
             var $box = $("<div></div>");
             var $container = $("<div></div>");
             debugger;
@@ -328,11 +343,73 @@
                 animateTime : 400
             }, opt));
             $(document.body).append($box);
+            $yesBtn.bind('click.dialog',function () {
+                if(!callback.call(this)){
+                    var btop = $box.css('top');
+                    var bleft = $box.css('left');
+                    $box.animate({
+                        top : btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
+                        left : bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
+                    }, 100 ,function () {
+                        $box.animate({
+                            top : btop.substring(0, btop.lastIndexOf("px")) - (2) + "px",
+                            left : bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
+                        }, 100 , function () {
+                            $box.animate({
+                                top : btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
+                                left : bleft.substring(0, bleft.lastIndexOf("px")) - (2) + "px"
+                            }, 100, function () {
+                                $box.animate({
+                                    top : btop.substring(0, btop.lastIndexOf("px")) - (-2) + "px",
+                                    left : bleft.substring(0, bleft.lastIndexOf("px")) - (-2) + "px"
+                                }, 100,function () {
+                                    $box.animate({
+                                        top : btop,
+                                        left : bleft
+                                    },100 ,function () {
+                                        falseCallback.call(this)
+                                    })
+                                })
+                            })
+                        })
+                    });
+                }else{
+                    g._closeDialog();
+                    trueCallback.call(this)
+                }
+            })
+        },
+
+        /**
+         * 弹出新页面
+         * 根据使用者传入的路径参数完成页面展示
+         * @param url iframe 路径（绝对相对）
+         * @param width iframe高度
+         * @param height iframe高度
+         * @param isBlank iframe和dialog之间是否有空白边框
+         */
+        iframeDialog : function (url, width , height, isBlank) {
+            var g = this, p = g.options, el = g.el, $el = $(el);
+            var $iframe = $("<iframe></iframe>");
+
+            var w, h ;
+            if((width.indexOf("em")!== -1 || width.indexOf("px") !== -1 || width.indexOf("%") !== -1)&&
+                (height.indexOf("em")!== -1 || height.indexOf("px") !== -1 || height.indexOf("%") !== -1)){
+                w = width;
+                h = height;
+            }else{
+                console.log("width和height 只支持单位为em、px、% 的字符串参数");
+                return false;
+            }
+            $iframe.setAttribute("src", url);
+            $iframe.css({
+                'height' : h,
+                'width' : w
+            });
+
         }
+
     };
-
-
-
 
 
 })(jQuery);

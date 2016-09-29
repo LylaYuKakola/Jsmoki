@@ -5,10 +5,6 @@
     <title>dialog</title>
     <script src="../js/common.js"></script>
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
         .input{
             width: 80%;
             font-size: 15px;
@@ -46,6 +42,12 @@
         $.fn.smokiDialog.answer($("#content").html(), {
             openAnimateType: 'slide-top',
             closeAnimateType : 'slide-bottom'
+        }, function () {
+            return false
+        }, function () {
+            console.log("fasle");
+        }, function () {
+            console.log("true");
         });
     }
 

@@ -8,11 +8,18 @@
  */
 
 (function () {
-    var runModel='local';
-    var $debugMode=true;
-    var js=document.scripts;
-    var jsPath=js[js.length-1].src.substring(0,js[js.length-1].src.lastIndexOf("/"));
-    webRoot=jsPath.substring(0,jsPath.lastIndexOf("/")+1);
+
+    function getWebRoot(rootName) {
+        var js = document.scripts;
+        var jsPath=js[js.length-1].src.substring(0,js[js.length-1].src.lastIndexOf("/"));
+        while(jsPath.lastIndexOf(rootName)-(-rootName.length) !== jsPath.length ){
+            jsPath = jsPath.substring(0 , jsPath.lastIndexOf("/"))
+        }
+
+        return jsPath + '/';
+
+    }
+    var webRoot =getWebRoot('Jsmoki');
 
     //js文件的路径（工程下js目录下的文件路径）
     var js_src = ["js/lib/jquery-3.0.0.min.js",
