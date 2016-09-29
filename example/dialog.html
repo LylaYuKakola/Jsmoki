@@ -21,7 +21,8 @@
 <div id="div1">
     <button onclick="dialogAlert()">alert</button>
     <button onclick="dialogAnswer()">answer</button>
-    <button>none</button>
+    <button onclick="dialogIframeDialog()">iframe</button>
+    <button onclick="dialogTips()">tips</button>
 </div>
 
 <div id="content" class="dialogForm" style="display: none">
@@ -49,6 +50,14 @@
         }, function () {
             console.log("true");
         });
+    }
+
+    function dialogIframeDialog() {
+        $.fn.smokiDialog.iframeDialog("http://www.baidu.com", "100%", "100%", true)
+    }
+
+    function dialogTips() {
+        $.fn.smokiDialog.tips("hello this is a tips", 3000);
     }
 
 </script>
