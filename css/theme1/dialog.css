@@ -1,7 +1,7 @@
 .closeABtn {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 5px;
+  top: 5px;
   background-color: rgba(0, 0, 0, 0);
   opacity: 0.4;
 }
@@ -12,11 +12,6 @@
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-filter: blur(10px);
-  /* Chrome, Opera */
-  -moz-filter: blur(10px);
-  -ms-filter: blur(10px);
-  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);
 }
 .dialog_container,
 .dialog_btnContainer {
@@ -26,6 +21,10 @@
 .dialog_yesBtn {
   width: 100%;
   font-size: 15px;
-  text-align: center;
-  padding: 0.7em;
+  padding: 1em 2em;
+  outline: none;
+  font-weight: 600;
+  border: none;
+  color: #fff;
+  background: #c94e50;
 }
