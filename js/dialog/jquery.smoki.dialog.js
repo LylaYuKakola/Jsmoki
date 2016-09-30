@@ -1,5 +1,5 @@
 /**
- * Created by zhbr on 2016/9/18.
+ * Created by sherfer on 2016/9/18.
  * dialogjs 对话框控件
  * 请务必使用新的元素去调用dialog方法，并将新元素加入到body中
  * 比如说 var $a = $("<div></div>"); $a.dialog(); $(document.body).append($a);
@@ -10,8 +10,8 @@
 
 (function ($) {
     /**
-     * @class layout.accordion
-     * @extends core.Widget 手风琴控件
+     * @class dialog
+     * @extends core.Widget 弹框
      */
     $.widget("smoki.dialog", $.smoki.Widget, {
         options: {
