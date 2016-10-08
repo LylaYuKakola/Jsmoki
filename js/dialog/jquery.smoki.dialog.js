@@ -17,23 +17,33 @@
         options: {
             /**
              * 弹出框宽度，默认20%
+             *
+             * @type string(css的width属性)
              */
             width: '20%',
             /**
              * 弹出框最小宽度，默认20%
+             *
+             * @type string(css的width属性)
              */
             minWidth: '20%',
             /**
              * 弹出框最大宽度，默认20%
+             *
+             * @type string(css的width属性)
              */
             maxWidth: '100%',
             /**
              * 弹出框高度，默认auto
+             *
+             * @type string(css的height属性)
              */
             height: 'auto',
             /**
-             * 背景设置
-             * 为‘none’的时候没有背景
+             * 阴影设置
+             * 为‘none’的时候没有阴影
+             *
+             * @type string(css的box-shadow属性)
              */
             boxShadow: '0 0 15px black',
             /**
@@ -45,6 +55,8 @@
              * 'slide-right' 从右边侧滑
              * 'slide-top' 从上边侧滑
              * 'slide-bottom' 从下边侧滑
+             *
+             * @type string
              */
             openAnimateType: "normal",
             /**
@@ -163,7 +175,7 @@
             var g = this, p = g.options, el = g.el, $el = $(el);
             var $mask = null;
             if (p.isMask) {
-                $mask = $("<div class='mask' id='dialog_mask'></div>");
+                $mask = $("<div class='com-mask' id='dialog_mask'></div>");
                 var bHeight = $(document.body).height() > $(window).height() ? $(document.body).width() : $(window).height();
                 $mask.css({
                     "z-index": $.fn.highestZindex + 1,
@@ -461,7 +473,7 @@
                 'height': "100%",
                 'width': "100%"
             });
-            $box.append($iframe);
+            //$box.append($iframe);
 
             $box.dialog($.extend(true, {
                 isCloseBtn: true,
@@ -473,6 +485,10 @@
                 animateTime: 150,
                 height: '600px'
             }, opt));
+
+            $box.waiting({
+                msg : 'just waiting'
+            });
             $(document.body).append($box);
         },
 

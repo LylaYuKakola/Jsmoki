@@ -28,6 +28,7 @@
                     "js/util/jquery.smoki.map.js",
                     "js/core/jquery.smoki.widgetmgr.js",
                     "js/core/jquery.smoki.widget.js",
+                    "js/loading/jquery.smoki.waiting.js",
                     "js/dialog/jquery.smoki.dialog.js"];
 
     //css文件路径（）

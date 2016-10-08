@@ -8,11 +8,6 @@
 .closeABtn:hover {
   opacity: 0.8;
 }
-.mask {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
 .dialog_container,
 .dialog_btnContainer {
   width: 100%;
